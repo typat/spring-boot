@@ -298,6 +298,7 @@ public class WebFluxAutoConfiguration {
 			}
 			AcceptHeaderLocaleContextResolver localeContextResolver = new AcceptHeaderLocaleContextResolver();
 			localeContextResolver.setDefaultLocale(this.webProperties.getLocale());
+			localeContextResolver.setSupportedLocales(this.webProperties.getSupportedLocales());
 			return localeContextResolver;
 		}
 

@@ -18,6 +18,8 @@ package org.springframework.boot.autoconfigure.web;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -36,8 +38,9 @@ import org.springframework.http.CacheControl;
 public class WebProperties {
 
 	/**
-	 * Locale to use. By default, this locale is overridden by the "Accept-Language"
-	 * header.
+	 * Locale to use when using a {@link LocaleResolver.FIXED Fixed Locale Resolver}. When
+	 * using a {@link LocaleResolver.ACCEPT_HEADER Accept-Language Header Locale
+	 * Resolver}, acts as the fallback if the "Accept-Language" header does not exist.
 	 */
 	private Locale locale;
 
@@ -45,6 +48,14 @@ public class WebProperties {
 	 * Define how the locale should be resolved.
 	 */
 	private LocaleResolver localeResolver = LocaleResolver.ACCEPT_HEADER;
+
+	/**
+	 * The locales supported by the request resolver. By default it is not used. When set,
+	 * will be checked against the requested locale. If an unsupported locale is
+	 * requested, the default locale will be returned. If no default locale is set, the
+	 * requested locale (even though unsupported) will be returned.
+	 */
+	private List<Locale> supportedLocales;
 
 	private final Resources resources = new Resources();
 
@@ -62,6 +73,14 @@ public class WebProperties {
 
 	public void setLocaleResolver(LocaleResolver localeResolver) {
 		this.localeResolver = localeResolver;
+	}
+
+	public List<Locale> getSupportedLocales() {
+		return supportedLocales;
+	}
+
+	public void setSupportedLocales(final List<Locale> supportedLocales) {
+		this.supportedLocales = supportedLocales;
 	}
 
 	public Resources getResources() {

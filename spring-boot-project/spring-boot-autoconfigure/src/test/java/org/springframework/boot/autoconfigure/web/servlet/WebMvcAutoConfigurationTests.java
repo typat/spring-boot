@@ -344,6 +344,21 @@ class WebMvcAutoConfigurationTests {
 	}
 
 	@Test
+	void useSetSupportedLocales() {
+		this.contextRunner.withPropertyValues("spring.web.supported-locales:en_UK,en_US,nl_NL").run((loader) -> {
+			// mock request and set user preferred locale
+			MockHttpServletRequest request = new MockHttpServletRequest();
+			request.addPreferredLocale(StringUtils.parseLocaleString("nl_NL"));
+			request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, "nl_NL");
+			LocaleResolver localeResolver = loader.getBean(LocaleResolver.class);
+			assertThat(localeResolver).isInstanceOf(AcceptHeaderLocaleResolver.class);
+			Locale locale = localeResolver.resolveLocale(request);
+			// test locale resolver uses user preferred locale
+			assertThat(locale.toString()).isEqualTo("nl_NL");
+		});
+	}
+
+	@Test
 	void customLocaleResolverWithMatchingNameReplacesAutoConfiguredLocaleResolver() {
 		this.contextRunner.withBean("localeResolver", CustomLocaleResolver.class, CustomLocaleResolver::new)
 				.run((context) -> {

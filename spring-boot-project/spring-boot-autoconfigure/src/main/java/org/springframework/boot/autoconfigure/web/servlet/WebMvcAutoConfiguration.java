@@ -461,6 +461,7 @@ public class WebMvcAutoConfiguration {
 			}
 			AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
 			localeResolver.setDefaultLocale(this.webProperties.getLocale());
+			localeResolver.setSupportedLocales(this.webProperties.getSupportedLocales());
 			return localeResolver;
 		}
 
